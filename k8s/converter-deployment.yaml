@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: converter-module
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: converter-module
+  template:
+    metadata:
+      labels:
+        app: converter-module
+    spec:
+      containers:
+      - name: converter
+        image: your-dockerhub-username/converter-module:latest
+        ports:
+        - containerPort: 5002
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: converter-service
+spec:
+  selector:
+    app: converter-module
+  ports:
+    - protocol: TCP
+      port: 5002
+      targetPort: 5002
+  type: NodePort
